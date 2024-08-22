@@ -4,6 +4,125 @@ import mongoose from 'mongoose';
 import { CustomError } from "../middlewares/error.js";
 
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *         - fullName
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *         username:
+ *           type: string
+ *           description: The username of the user
+ *         email:
+ *           type: string
+ *           description: The email of the user
+ *         password:
+ *           type: string
+ *           description: The password of the user
+ *         fullName:
+ *           type: string
+ *           description: The full name of the user
+ *         bio:
+ *           type: string
+ *           description: The bio of the user
+ *         profilePicture:
+ *           type: string
+ *           description: The profile picture URL of the user
+ *         coverPicture:
+ *           type: string
+ *           description: The cover picture URL of the user
+ *         posts:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The posts created by the user
+ *         followers:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The followers of the user
+ *         following:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The users followed by this user
+ *         blockList:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The users blocked by this user
+ *         createdAt:
+ *           type: string
+ *           format: date
+ *           description: The date the user was created
+ *         updatedAt:
+ *           type: string
+ *           format: date
+ *           description: The date the user was last updated
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: The users managing API
+ * /users/{userId}:
+ *   get:
+ *     summary: Get the user by id
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *     responses:
+ *       200:
+ *         description: The user response by id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: The user was not found
+ *   put:
+ *     summary: Update the user by the id
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: The user was updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: The user was not found
+ *       500:
+ *         description: Some error happened
+ */
 
 const getUserController = async (req, res, next) => {
     const { userId } = req.params;
