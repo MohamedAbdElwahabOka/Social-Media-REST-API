@@ -1,5 +1,11 @@
 import express from "express"
-import { getUserController, updateUserController } from "../controllers/userController.js"
+import {
+    getUserController,
+    updateUserController,
+    followUserController,
+    unfollowUserController,
+    blockUserController
+} from "../controllers/userController.js"
 
 const router = express.Router();
 
@@ -67,6 +73,15 @@ router.get("/:userId", getUserController)
 
 //UPDATE USER
 router.put("/update/:userId", updateUserController)
+
+//FOLLOW USER
+router.post("/follow/:userId", followUserController)
+
+//UNFOLLOW USER
+router.post("/unfollow/:userId", unfollowUserController)
+
+//BLOCK USER
+router.post("/block/:userId", blockUserController)
 
 
 
