@@ -1,8 +1,9 @@
-const express = require("express");
-const connectDB = require("./Database/db");
-const dotenv = require("dotenv")
-const authRoute = require("./routes/auth")
-const bcrypt = require("bcrypt")
+import express from "express"
+import connectDB from "./Database/db.js"
+import dotenv from "dotenv"
+import authRoute from "./routes/auth.js"
+import bcrypt from "bcrypt"
+
 
 const app = express();
 

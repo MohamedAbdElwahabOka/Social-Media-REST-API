@@ -1,8 +1,16 @@
-const express = require("express")
+import express from "express"
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
+import User from "../models/User.js"
+import dotenv from "dotenv"
+import cookie from 'cookie-parser'
+dotenv.config()
+
+
+
 
 const router = express.Router()
-const User = require("../models/User")
-const bcrypt = require("bcrypt")
+
 
 //REGISTER
 router.post("/register", async (req, res) => {
@@ -38,6 +46,21 @@ router.post("/login", async (req, res) => {
             user = await User.findOne({ username: req.body.username })
         }
 
+        if (!user) {
+            return res.status(404).json("User Not Found!")
+        }
+
+        const match = await bcrypt.compare(req.body.password, user.password)
+        if (!match) {
+            return res.status(400).json("Wrong Password or email");
+
+        }
+        const { password, ...data } = user._doc
+        // const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, process.env.EXPIRES_IN)
+        const token = jwt.sign({ _id: user._id }, "kfidfkalskksdjaisddddfkasdf", { expiresIn: "3d" })
+        res.cookie("token", token).status(200).json(data)
+
+
 
     } catch (error) {
         res.status(500).json(error)
@@ -48,10 +71,21 @@ router.post("/login", async (req, res) => {
 
 //LOGOUT
 
+router.get("/logout", async (req, res) => {
+    try {
+        res.clearCookie("token", { sameSite: "none", secure: true }).status(200).json("logeed out ")
+
+    } catch (error) {
+        res.status(500).json(error)
+
+    }
+
+})
+
 
 
 //FETCH CURRENT USER
 
 
 
-module.exports = router
+export default router;
