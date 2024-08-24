@@ -4,7 +4,9 @@ import {
     updateUserController,
     followUserController,
     unfollowUserController,
-    blockUserController
+    blockUserController,
+    unblockUserController,
+    getBlockedUsersController
 } from "../controllers/userController.js"
 
 const router = express.Router();
@@ -82,6 +84,11 @@ router.post("/unfollow/:userId", unfollowUserController)
 
 //BLOCK USER
 router.post("/block/:userId", blockUserController)
+
+router.post("/Unblock/:userId", unblockUserController)
+
+//GET BLOCKED USERS
+router.get("/blocked/:userId", getBlockedUsersController)
 
 
 
