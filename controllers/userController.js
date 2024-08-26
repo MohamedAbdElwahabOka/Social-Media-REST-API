@@ -1,5 +1,6 @@
 
 import User from "../models/User.js";
+import Post from "../models/Post.js"
 import mongoose from 'mongoose';
 import { CustomError } from "../middlewares/error.js";
 
@@ -333,6 +334,26 @@ const getBlockedUsersController = async (req, res, next) => {
     }
 }
 
+const deleteUserController = async (req, res, next) => {
+    const { userId } = req.params
+
+    try {
+        const userToDelete = await User.findById(userId)
+
+        if (!userToDelete) {
+            throw new CustomError("User not found!", 404)
+        }
+        await Post.deleteMany({ user: userId })
+        await Post.deleteMany({ "comments.user": userId })
+        await Post.deleteMany({ "comments.replies.user": userId })
+        await Post.updateMany({ likes: userId }, { $pull: { likes: userId } })
+        await Post.updateMany({}, { $pull: { likes: userId } })
+
+
+    } catch (error) {
+
+    }
+}
 
 
 
@@ -341,4 +362,4 @@ const getBlockedUsersController = async (req, res, next) => {
 
 
 
-export { getUserController, updateUserController, followUserController, unfollowUserController, blockUserController, unblockUserController, getBlockedUsersController };
+export { getUserController, updateUserController, followUserController, unfollowUserController, blockUserController, unblockUserController, getBlockedUsersController, deleteUserController };
