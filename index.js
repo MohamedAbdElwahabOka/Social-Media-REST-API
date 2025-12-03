@@ -11,7 +11,7 @@ dotenv.config()
 
 // 1. Initialize App & Database
 const app = express();
-connectDB(); // كان ناقص استدعاء الدالة دي عشان يتصل بالداتا
+connectDB(); // الاتصال بقاعدة البيانات
 
 app.use(express.json())
 
@@ -30,7 +30,7 @@ const options = {
                 description: "Local Development Server"
             },
             {
-                // ده الرابط اللي ظهر في السكرين شوت بتاعتك
+                // تأكد إن الرابط ده هو رابط مشروعك على فيرسل
                 url: "https://social-media-rest-api-gamma.vercel.app",
                 description: "Production Server (Vercel)"
             }
@@ -55,16 +55,21 @@ const options = {
 
 const specs = swaggerJSDoc(options)
 
-// 3. CSS Fix for Vercel (الحل لمشكلة الشاشة البيضاء)
-// بنجيب ملف الـ CSS من رابط خارجي عشان vercel مش بيعرف يقرا الملفات المحلية للـ swagger
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+// 3. THE FIX: Load Swagger Assets from CDN for Vercel
+// ده الجزء اللي بيصلح مشكلة الشاشة البيضاء
+// بنجيب ملفات التصميم والسكريبتات من سيرفر خارجي لأن Vercel مش بيقرأ الملفات المحلية
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css";
+const JS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js";
+const JS_PRESET_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js";
 
 app.use(
     "/api-docs",
     swaggerUI.serve,
     swaggerUI.setup(specs, {
-        customCssUrl: CSS_URL,  // ده السطر المهم جداً
-        customCss: '.swagger-ui .topbar { display: none } .swagger-ui .info { margin: 30px 0 }' // الستايل بتاعك
+        customCssUrl: CSS_URL,
+        customJs: [JS_URL, JS_PRESET_URL], // تحميل ملفات الجافاسكريبت الضرورية
+        customCss: '.swagger-ui .topbar { display: none } .swagger-ui .info { margin: 30px 0 }', // إخفاء الشريط العلوي
+        customSiteTitle: "Social Media API Docs"
     })
 )
 
