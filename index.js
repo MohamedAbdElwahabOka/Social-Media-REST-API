@@ -73,7 +73,8 @@ app.use("/api/user", userRoute)
 // Error Handler Middleware (لازم يكون بعد الراوتس)
 app.use(errorHandler)
 
-app.listen(5000, () => {
-    connectDB();
-    console.log("Server is running on port 5000...");
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
